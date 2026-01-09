@@ -534,6 +534,146 @@ const WorldData = {
                     narration: 'Champion level. Build the longest sentence. Slow and steady wins.'
                 }
             ]
+        },
+
+        // New World: Body Parts Learning with Pose Detection
+        bodyparts: {
+            id: 'bodyparts',
+            name: 'My Body',
+            icon: '🧍',
+            color: '#00b894',
+            gradient: 'linear-gradient(135deg, #00b894 0%, #55efc4 100%)',
+            description: 'Learn body parts with your camera!',
+            totalLevels: 5,
+            storyIntro: 'Let\'s learn about your amazing body! Stand in front of the camera and touch the body parts I ask for!',
+            narrator: '👨‍⚕️',
+            requiresCamera: true,
+            levels: [
+                {
+                    number: 1,
+                    name: 'Head & Face',
+                    type: 'bodyparts',
+                    gameType: 'pose-learning',
+                    description: 'Learn about your head and face',
+                    difficulty: 'easy',
+                    bodyPartFocus: ['head', 'nose'],
+                    narration: 'Let\'s start with your head! Can you touch your head?'
+                },
+                {
+                    number: 2,
+                    name: 'Eyes & Ears',
+                    type: 'bodyparts',
+                    gameType: 'pose-learning',
+                    description: 'Find your eyes and ears',
+                    difficulty: 'easy',
+                    bodyPartFocus: ['left_eye', 'right_eye', 'left_ear', 'right_ear'],
+                    narration: 'Now let\'s find your eyes and ears!'
+                },
+                {
+                    number: 3,
+                    name: 'Arms & Shoulders',
+                    type: 'bodyparts',
+                    gameType: 'pose-learning',
+                    description: 'Learn about your arms',
+                    difficulty: 'medium',
+                    bodyPartFocus: ['left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow'],
+                    narration: 'Your arms help you do so many things! Let\'s learn about them.'
+                },
+                {
+                    number: 4,
+                    name: 'Hands & Wrists',
+                    type: 'bodyparts',
+                    gameType: 'pose-learning',
+                    description: 'Explore your hands',
+                    difficulty: 'medium',
+                    bodyPartFocus: ['left_wrist', 'right_wrist'],
+                    narration: 'Your hands are amazing! Show me your wrists!'
+                },
+                {
+                    number: 5,
+                    name: 'Legs & Knees',
+                    type: 'bodyparts',
+                    gameType: 'pose-learning',
+                    description: 'Learn about your legs',
+                    difficulty: 'medium',
+                    bodyPartFocus: ['left_knee', 'right_knee', 'left_hip', 'right_hip'],
+                    narration: 'Your legs help you run and jump! Let\'s explore them!'
+                }
+            ]
+        },
+
+        // New World: Art & Creativity
+        art: {
+            id: 'art',
+            name: 'Art Studio',
+            icon: '🎨',
+            color: '#fd79a8',
+            gradient: 'linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%)',
+            description: 'Paint, color, and create!',
+            totalLevels: 6,
+            storyIntro: 'Welcome to the Art Studio! Here you can paint, color pictures, and learn about colors!',
+            narrator: '🎭',
+            levels: [
+                {
+                    number: 1,
+                    name: 'Free Painting',
+                    type: 'painting',
+                    gameType: 'free-paint',
+                    mode: 'free',
+                    description: 'Paint whatever you imagine!',
+                    narration: 'This is your canvas! Pick any color and paint whatever you want!'
+                },
+                {
+                    number: 2,
+                    name: 'Color the Apple',
+                    type: 'painting',
+                    gameType: 'coloring',
+                    mode: 'coloring',
+                    taskCount: 1,
+                    targetShape: 'apple',
+                    description: 'Color the apple red',
+                    narration: 'Apples are red! Can you color this apple?'
+                },
+                {
+                    number: 3,
+                    name: 'Sunny Day',
+                    type: 'painting',
+                    gameType: 'coloring',
+                    mode: 'coloring',
+                    taskCount: 2,
+                    description: 'Color the sun and sky',
+                    narration: 'The sun is bright yellow! Color the sun and the blue sky!'
+                },
+                {
+                    number: 4,
+                    name: 'Nature Colors',
+                    type: 'painting',
+                    gameType: 'coloring',
+                    mode: 'coloring',
+                    taskCount: 2,
+                    description: 'Color trees and flowers',
+                    narration: 'Trees are green and flowers can be any color you like!'
+                },
+                {
+                    number: 5,
+                    name: 'Rainbow Colors',
+                    type: 'painting',
+                    gameType: 'coloring',
+                    mode: 'coloring',
+                    taskCount: 3,
+                    description: 'Learn all the rainbow colors',
+                    narration: 'A rainbow has so many colors! Let\'s learn them all!'
+                },
+                {
+                    number: 6,
+                    name: 'Art Master',
+                    type: 'painting',
+                    gameType: 'free-paint',
+                    mode: 'free',
+                    description: 'Create your masterpiece!',
+                    narration: 'You are now an art master! Create anything you can imagine!'
+                }
+            ]
         }
     },
 

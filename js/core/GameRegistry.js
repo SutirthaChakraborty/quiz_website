@@ -148,7 +148,7 @@ const GameRegistry = {
      * @returns {string} Game type identifier
      */
     getGameTypeForLevel(world, level) {
-        // Check level type first (matching, memory, sentence are game types)
+        // Check level type first (matching, memory, sentence, bodyparts, painting are game types)
         if (level.type) {
             // Map level types to game types
             const typeMap = {
@@ -158,7 +158,12 @@ const GameRegistry = {
                 'word-order': 'sentence',
                 'drag-drop': 'matching',
                 'quiz': 'quiz',
-                'puzzle': 'puzzle'
+                'puzzle': 'puzzle',
+                'bodyparts': 'bodyparts',
+                'painting': 'painting',
+                'pose-learning': 'bodyparts',
+                'coloring': 'painting',
+                'free-paint': 'painting'
             };
             
             if (typeMap[level.type]) {
@@ -169,6 +174,12 @@ const GameRegistry = {
         // World-specific defaults
         if (world.id === 'stories') {
             return 'sentence';
+        }
+        if (world.id === 'bodyparts') {
+            return 'bodyparts';
+        }
+        if (world.id === 'art') {
+            return 'painting';
         }
         
         // Default to matching game
@@ -189,6 +200,39 @@ const GameRegistry = {
         
         console.log(`Starting ${gameType} game for ${world.id}/${level.name}`);
         
+        // For bodyparts and painting games, use the main game container and hide the nested containers
+        const gameContainer = document.getElementById('gameContainer');
+        
+        if (gameType === 'bodyparts' || gameType === 'painting') {
+            // Hide the normal game containers for these special games
+            if (containers.dropZones) {
+                containers.dropZones.style.display = 'none';
+            }
+            if (containers.itemsContainer) {
+                containers.itemsContainer.style.display = 'none';
+            }
+            
+            // Create a fresh instance with proper container (don't cache these)
+            const gameInfo = this.games[gameType];
+            if (!gameInfo) {
+                console.error(`Game type "${gameType}" not found`);
+                return null;
+            }
+            
+            const game = new gameInfo.GameClass({
+                container: gameContainer,
+                ...callbacks,
+                mode: level.mode || 'free',
+                difficulty: level.difficulty || 'easy',
+                taskCount: level.taskCount || 3
+            });
+            
+            // Start the game
+            game.start();
+            return game;
+        }
+        
+        // For other game types, use the normal flow
         const game = this.getOrCreateInstance(gameType, {
             container: containers.itemsContainer,
             dropZones: containers.dropZones,
@@ -202,11 +246,13 @@ const GameRegistry = {
         
         // Configure container visibility based on game type
         if (containers.dropZones) {
-            containers.dropZones.style.display = 
-                (gameType === 'memory') ? 'none' : 'flex';
+            containers.dropZones.style.display = (gameType === 'memory') ? 'none' : 'flex';
+        }
+        if (containers.itemsContainer) {
+            containers.itemsContainer.style.display = '';
         }
         
-        // Initialize the game with config
+        // Initialize the game with config based on game type
         if (gameType === 'sentence') {
             game.init(gameConfig);
         } else {

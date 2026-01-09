@@ -264,6 +264,36 @@
                     <div class="world-status unlocked">✨</div>
                 </div>
                 
+                <!-- World 6: My Body (Body Parts Learning) -->
+                <div class="world-node" data-world="bodyparts" data-unlocked="true">
+                    <div class="world-icon">🧍</div>
+                    <div class="world-info">
+                        <h3>My Body</h3>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>0/5</span>
+                        </div>
+                    </div>
+                    <div class="world-status unlocked">📷</div>
+                </div>
+                
+                <!-- World 7: Art Studio (Painting & Coloring) -->
+                <div class="world-node" data-world="art" data-unlocked="true">
+                    <div class="world-icon">🎨</div>
+                    <div class="world-info">
+                        <h3>Art Studio</h3>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>0/6</span>
+                        </div>
+                    </div>
+                    <div class="world-status unlocked">✨</div>
+                </div>
+                
                 <!-- Path connections will be drawn via CSS/Canvas -->
                 <svg class="world-paths" id="worldPaths"></svg>
             </div>
@@ -563,6 +593,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
     
     <!-- TensorFlow.js for advanced ML features -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
@@ -574,31 +605,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
     
     <!-- App Scripts - Utilities -->
-    <script src="js/utils/helpers.js?v=14"></script>
-    <script src="js/utils/storage.js?v=14"></script>
-    <script src="js/utils/audio.js?v=14"></script>
-    <script src="js/utils/speech.js?v=14"></script>
+    <script src="js/utils/helpers.js?v=18"></script>
+    <script src="js/utils/storage.js?v=18"></script>
+    <script src="js/utils/audio.js?v=18"></script>
+    <script src="js/utils/speech.js?v=18"></script>
     
     <!-- App Scripts - Core -->
-    <script src="js/core/particles.js?v=14"></script>
-    <script src="js/core/handTracking.js?v=14"></script>
-    <script src="js/core/GameRegistry.js?v=14"></script>
-    <script src="js/core/BaseGame.js?v=14"></script>
-    <script src="js/core/gameEngine.js?v=14"></script>
-    <script src="js/core/progression.js?v=14"></script>
+    <script src="js/core/particles.js?v=18"></script>
+    <script src="js/core/handTracking.js?v=18"></script>
+    <script src="js/core/GameRegistry.js?v=18"></script>
+    <script src="js/core/BaseGame.js?v=18"></script>
+    <script src="js/core/gameEngine.js?v=18"></script>
+    <script src="js/core/progression.js?v=18"></script>
     
     <!-- App Scripts - Data -->
-    <script src="js/data/gameData.js?v=14"></script>
-    <script src="js/data/worldData.js?v=14"></script>
+    <script src="js/data/gameData.js?v=18"></script>
+    <script src="js/data/worldData.js?v=18"></script>
     
     <!-- App Scripts - Games (self-registering) -->
-    <script src="js/games/MatchingGame.js?v=14"></script>
-    <script src="js/games/MemoryGame.js?v=14"></script>
-    <script src="js/games/SentenceGame.js?v=14"></script>
-    <script src="js/games/QuizGame.js?v=14"></script>
-    <script src="js/games/gameGenerators.js?v=14"></script>
+    <script src="js/games/MatchingGame.js?v=18"></script>
+    <script src="js/games/MemoryGame.js?v=18"></script>
+    <script src="js/games/SentenceGame.js?v=18"></script>
+    <script src="js/games/QuizGame.js?v=18"></script>
+    <script src="js/games/BodyPartsGame.js?v=18"></script>
+    <script src="js/games/PaintingGame.js?v=18"></script>
+    <script src="js/games/gameGenerators.js?v=18"></script>
     
     <!-- Main App -->
-    <script src="js/App.js?v=14"></script>
+    <script src="js/App.js?v=18"></script>
 </body>
 </html>
