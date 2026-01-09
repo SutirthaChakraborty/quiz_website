@@ -137,10 +137,14 @@
     --button-height: 48px;
     --input-height: 48px;
     
-    /* === Game Specific === */
-    --card-size: clamp(60px, 15vw, 100px);
-    --drop-zone-size: clamp(70px, 18vw, 120px);
-    --item-size: clamp(50px, 12vw, 80px);
+    /* === Game Specific - Extra Large for Dyslexia Accessibility === */
+    --card-size: clamp(100px, 22vw, 160px);
+    --drop-zone-size: clamp(110px, 25vw, 180px);
+    --item-size: clamp(90px, 20vw, 140px);
+    
+    /* Font sizes for game elements */
+    --game-emoji-size: clamp(2.5rem, 6vw, 4rem);
+    --game-text-size: clamp(1.25rem, 3.5vw, 2rem);
 }
 
 /* Dyslexia Mode Overrides */
@@ -166,4 +170,122 @@
     --text-secondary: #ffffff;
     --bg-dark: #000000;
     --bg-card: #1a1a1a;
+}
+
+/* ============================================
+   Color Palette Themes - Dyslexia Friendly
+   ============================================ */
+
+/* Ocean Theme - Calming Blues */
+.palette-ocean {
+    --color-primary: #0077b6;
+    --color-primary-light: #48cae4;
+    --color-primary-dark: #023e8a;
+    --color-secondary: #00b4d8;
+    --color-secondary-light: #90e0ef;
+    --bg-dark: #03045e;
+    --bg-darker: #023e8a;
+    --bg-card: #0077b6;
+    --gradient-primary: linear-gradient(135deg, #0077b6 0%, #48cae4 100%);
+    --gradient-secondary: linear-gradient(135deg, #00b4d8 0%, #90e0ef 100%);
+}
+
+/* Forest Theme - Relaxing Greens */
+.palette-forest {
+    --color-primary: #2d6a4f;
+    --color-primary-light: #52b788;
+    --color-primary-dark: #1b4332;
+    --color-secondary: #40916c;
+    --color-secondary-light: #74c69d;
+    --bg-dark: #1b4332;
+    --bg-darker: #081c15;
+    --bg-card: #2d6a4f;
+    --gradient-primary: linear-gradient(135deg, #2d6a4f 0%, #52b788 100%);
+    --gradient-secondary: linear-gradient(135deg, #40916c 0%, #95d5b2 100%);
+}
+
+/* Sunset Theme - Warm Orange/Pink */
+.palette-sunset {
+    --color-primary: #e85d04;
+    --color-primary-light: #faa307;
+    --color-primary-dark: #d00000;
+    --color-secondary: #f48c06;
+    --color-secondary-light: #ffba08;
+    --bg-dark: #370617;
+    --bg-darker: #03071e;
+    --bg-card: #6a040f;
+    --gradient-primary: linear-gradient(135deg, #e85d04 0%, #faa307 100%);
+    --gradient-secondary: linear-gradient(135deg, #f48c06 0%, #ffba08 100%);
+}
+
+/* Berry Theme - Purple/Magenta */
+.palette-berry {
+    --color-primary: #7b2cbf;
+    --color-primary-light: #c77dff;
+    --color-primary-dark: #5a189a;
+    --color-secondary: #9d4edd;
+    --color-secondary-light: #e0aaff;
+    --bg-dark: #240046;
+    --bg-darker: #10002b;
+    --bg-card: #3c096c;
+    --gradient-primary: linear-gradient(135deg, #7b2cbf 0%, #c77dff 100%);
+    --gradient-secondary: linear-gradient(135deg, #9d4edd 0%, #e0aaff 100%);
+}
+
+/* Candy Theme - Bright & Fun */
+.palette-candy {
+    --color-primary: #ff006e;
+    --color-primary-light: #ff5c8a;
+    --color-primary-dark: #d00055;
+    --color-secondary: #8338ec;
+    --color-secondary-light: #a663ff;
+    --bg-dark: #3a0ca3;
+    --bg-darker: #240066;
+    --bg-card: #4361ee;
+    --gradient-primary: linear-gradient(135deg, #ff006e 0%, #ff5c8a 100%);
+    --gradient-secondary: linear-gradient(135deg, #8338ec 0%, #fb5607 100%);
+}
+
+/* Earth Theme - Brown/Tan (Low Stimulation) */
+.palette-earth {
+    --color-primary: #bc6c25;
+    --color-primary-light: #dda15e;
+    --color-primary-dark: #944d12;
+    --color-secondary: #606c38;
+    --color-secondary-light: #a3b18a;
+    --bg-dark: #283618;
+    --bg-darker: #1a2410;
+    --bg-card: #3a4a24;
+    --gradient-primary: linear-gradient(135deg, #bc6c25 0%, #dda15e 100%);
+    --gradient-secondary: linear-gradient(135deg, #606c38 0%, #a3b18a 100%);
+}
+
+/* Cream Theme - Light/Pastel (Easy on Eyes) */
+.palette-cream {
+    --color-primary: #8ecae6;
+    --color-primary-light: #b8e0f3;
+    --color-primary-dark: #219ebc;
+    --color-secondary: #ffb703;
+    --color-secondary-light: #ffd166;
+    --bg-dark: #f8f9fa;
+    --bg-darker: #e9ecef;
+    --bg-card: #ffffff;
+    --text-primary: #023047;
+    --text-secondary: #126782;
+    --gradient-primary: linear-gradient(135deg, #8ecae6 0%, #219ebc 100%);
+    --gradient-secondary: linear-gradient(135deg, #ffb703 0%, #fb8500 100%);
+}
+
+/* Rainbow Theme - Colorful & Playful */
+.palette-rainbow {
+    --color-primary: #9b5de5;
+    --color-primary-light: #c77dff;
+    --color-primary-dark: #7b2cbf;
+    --color-secondary: #00bbf9;
+    --color-secondary-light: #00f5d4;
+    --bg-dark: #240046;
+    --bg-darker: #10002b;
+    --bg-card: #3c096c;
+    --gradient-primary: linear-gradient(135deg, #f15bb5 0%, #9b5de5 50%, #00bbf9 100%);
+    --gradient-secondary: linear-gradient(135deg, #fee440 0%, #00bbf9 50%, #00f5d4 100%);
 }

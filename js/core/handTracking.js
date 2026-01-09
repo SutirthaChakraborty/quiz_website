@@ -40,17 +40,29 @@ const HandTracking = {
      * Initialize hand tracking
      */
     async init() {
-        if (this.initialized) return true;
+        console.log('HandTracking.init() called');
+        
+        if (this.initialized) {
+            console.log('HandTracking already initialized');
+            return true;
+        }
 
         // Check if MediaPipe is available
         if (typeof Hands === 'undefined') {
-            console.warn('MediaPipe Hands not loaded');
+            console.warn('MediaPipe Hands not loaded - typeof Hands:', typeof Hands);
+            console.warn('Make sure MediaPipe Hands script is loaded from CDN');
             return false;
         }
+        console.log('MediaPipe Hands is available');
 
         // Get elements
         this.videoElement = document.getElementById('cameraVideo');
         this.canvasElement = document.getElementById('cameraCanvas');
+        
+        console.log('Camera elements:', {
+            video: this.videoElement ? 'found' : 'NOT FOUND',
+            canvas: this.canvasElement ? 'found' : 'NOT FOUND'
+        });
         
         if (!this.videoElement || !this.canvasElement) {
             console.warn('Camera elements not found');
@@ -59,37 +71,67 @@ const HandTracking = {
 
         this.canvasCtx = this.canvasElement.getContext('2d');
 
-        // Initialize MediaPipe Hands
-        this.hands = new Hands({
-            locateFile: (file) => {
-                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
-            }
-        });
+        try {
+            // Initialize MediaPipe Hands
+            console.log('Initializing MediaPipe Hands...');
+            this.hands = new Hands({
+                locateFile: (file) => {
+                    const url = `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+                    console.log('Loading MediaPipe file:', url);
+                    return url;
+                }
+            });
 
-        this.hands.setOptions({
-            maxNumHands: 1,
-            modelComplexity: 1,
-            minDetectionConfidence: this.config.minDetectionConfidence,
-            minTrackingConfidence: this.config.minTrackingConfidence
-        });
+            this.hands.setOptions({
+                maxNumHands: 1,
+                modelComplexity: 1,
+                minDetectionConfidence: this.config.minDetectionConfidence,
+                minTrackingConfidence: this.config.minTrackingConfidence
+            });
 
-        this.hands.onResults((results) => this.onResults(results));
+            this.hands.onResults((results) => this.onResults(results));
 
-        this.initialized = true;
-        console.log('HandTracking initialized');
-        return true;
+            this.initialized = true;
+            console.log('HandTracking initialized successfully');
+            return true;
+        } catch (error) {
+            console.error('Error initializing MediaPipe Hands:', error);
+            return false;
+        }
     },
 
     /**
      * Start hand tracking
      */
     async start() {
+        console.log('HandTracking.start() called');
+        
+        // Check if we're in a secure context (required for camera access)
+        if (!window.isSecureContext) {
+            console.error('Camera requires HTTPS or localhost. Current context is not secure.');
+            console.error('Current URL:', window.location.href);
+            return false;
+        }
+        
+        // Check if mediaDevices API is available
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            console.error('navigator.mediaDevices.getUserMedia is not available');
+            console.error('This may be because you are not on HTTPS or localhost');
+            return false;
+        }
+        
         if (!this.initialized) {
+            console.log('HandTracking not initialized, calling init()...');
             const success = await this.init();
-            if (!success) return false;
+            if (!success) {
+                console.warn('HandTracking.init() failed');
+                return false;
+            }
         }
 
         try {
+            console.log('Requesting camera access...');
+            console.log('Calling getUserMedia now - browser should show permission prompt');
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     width: { ideal: 320 },
@@ -97,11 +139,16 @@ const HandTracking = {
                     facingMode: 'user'
                 }
             });
+            console.log('Camera access granted');
 
             this.videoElement.srcObject = stream;
             
             await new Promise((resolve) => {
                 this.videoElement.onloadedmetadata = () => {
+                    console.log('Video metadata loaded:', {
+                        width: this.videoElement.videoWidth,
+                        height: this.videoElement.videoHeight
+                    });
                     this.canvasElement.width = this.videoElement.videoWidth;
                     this.canvasElement.height = this.videoElement.videoHeight;
                     resolve();
@@ -109,11 +156,15 @@ const HandTracking = {
             });
 
             await this.videoElement.play();
+            console.log('Video playing');
 
             // Show camera container
             const cameraContainer = document.getElementById('floatingCamera');
             if (cameraContainer) {
                 cameraContainer.classList.add('active');
+                console.log('Camera container shown');
+            } else {
+                console.warn('floatingCamera element not found');
             }
 
             // Update camera status
@@ -125,11 +176,23 @@ const HandTracking = {
             this.enabled = true;
             this.detectLoop();
             
-            console.log('Hand tracking started');
+            console.log('Hand tracking started successfully');
             return true;
 
         } catch (error) {
             console.error('Error starting camera:', error);
+            console.error('Error name:', error.name);
+            console.error('Error message:', error.message);
+            
+            // Provide user-friendly feedback
+            if (error.name === 'NotAllowedError') {
+                console.warn('Camera permission was denied by user');
+            } else if (error.name === 'NotFoundError') {
+                console.warn('No camera found on this device');
+            } else if (error.name === 'NotReadableError') {
+                console.warn('Camera is already in use by another application');
+            }
+            
             return false;
         }
     },

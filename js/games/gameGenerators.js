@@ -540,3 +540,21 @@ window.ColorGames = ColorGames;
 window.WordGames = WordGames;
 window.NumberGames = NumberGames;
 window.StoryGames = StoryGames;
+
+// Register generators with GameRegistry for automatic game routing
+if (window.GameRegistry) {
+    GameRegistry.registerGenerator('letters', LetterGames);
+    GameRegistry.registerGenerator('colors', ColorGames);
+    GameRegistry.registerGenerator('words', WordGames);
+    GameRegistry.registerGenerator('numbers', NumberGames);
+    GameRegistry.registerGenerator('stories', {
+        getGameConfig(level) {
+            return {
+                type: 'sentence',
+                gameType: 'word-order',
+                sentence: StoryGames.getSentenceForLevel(level),
+                level
+            };
+        }
+    });
+}

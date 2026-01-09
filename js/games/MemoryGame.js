@@ -5,7 +5,7 @@
 
 class MemoryGame {
     constructor(options = {}) {
-        this.container = options.container || document.getElementById('game-items-container');
+        this.container = options.container || document.getElementById('itemsContainer');
         this.onComplete = options.onComplete || (() => {});
         this.onScoreChange = options.onScoreChange || (() => {});
         this.onProgress = options.onProgress || (() => {});
@@ -452,3 +452,14 @@ class MemoryGame {
 
 // Export
 window.MemoryGame = MemoryGame;
+
+// Register with GameRegistry
+if (window.GameRegistry) {
+    GameRegistry.register('memory', MemoryGame, {
+        name: 'Memory Game',
+        description: 'Flip cards to find matching pairs',
+        icon: '🃏',
+        supportedWorlds: ['letters', 'colors', 'words', 'numbers'],
+        version: '1.0.0'
+    });
+}

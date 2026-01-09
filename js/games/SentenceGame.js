@@ -429,3 +429,14 @@ class SentenceGame {
 }
 
 window.SentenceGame = SentenceGame;
+
+// Register with GameRegistry
+if (window.GameRegistry) {
+    GameRegistry.register('sentence', SentenceGame, {
+        name: 'Sentence Builder',
+        description: 'Build sentences by putting words in the correct order',
+        icon: '📝',
+        supportedWorlds: ['stories'],
+        version: '1.0.0'
+    });
+}

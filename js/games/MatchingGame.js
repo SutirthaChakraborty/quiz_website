@@ -5,8 +5,8 @@
 
 class MatchingGame {
     constructor(options = {}) {
-        this.container = options.container || document.getElementById('game-items-container');
-        this.dropZones = options.dropZones || document.getElementById('drop-zones-container');
+        this.container = options.container || document.getElementById('itemsContainer');
+        this.dropZones = options.dropZones || document.getElementById('dropZones');
         this.onComplete = options.onComplete || (() => {});
         this.onScoreChange = options.onScoreChange || (() => {});
         this.onProgress = options.onProgress || (() => {});
@@ -179,6 +179,16 @@ class MatchingGame {
      * @param {Array} pairs - Array of {item, target, display, audio} objects
      */
     init(pairs) {
+        if (!pairs || !pairs.length) {
+            console.error('MatchingGame.init: No pairs provided!');
+            return;
+        }
+        
+        if (!this.container) {
+            console.error('MatchingGame.init: Container is null!');
+            return;
+        }
+        
         this.reset();
         this.items = [];
         this.zones = [];
@@ -661,3 +671,14 @@ class MatchingGame {
 
 // Export for use
 window.MatchingGame = MatchingGame;
+
+// Register with GameRegistry
+if (window.GameRegistry) {
+    GameRegistry.register('matching', MatchingGame, {
+        name: 'Matching Game',
+        description: 'Drag and drop items to match with their pairs',
+        icon: '🎯',
+        supportedWorlds: ['letters', 'colors', 'words', 'numbers'],
+        version: '1.0.0'
+    });
+}

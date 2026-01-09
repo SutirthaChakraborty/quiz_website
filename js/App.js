@@ -40,6 +40,10 @@ class LexiQuestApp {
             this.loadPlayerData();
             console.log('Player data loaded:', this.player);
             
+            // Load saved color palette
+            this.loadColorPalette();
+            console.log('Color palette loaded');
+            
             // Initialize modules
             await this.initModules();
             console.log('Modules initialized');
@@ -173,8 +177,20 @@ class LexiQuestApp {
             this.updateLoadingProgress(70, 'Preparing games...');
             console.log('Preparing games...');
             
-            // Initialize game instances
-            if (window.MatchingGame) {
+            // Initialize GameRegistry with default callbacks
+            if (window.GameRegistry) {
+                GameRegistry.setDefaultCallbacks({
+                    onComplete: (result) => this.handleLevelComplete(result),
+                    onScoreChange: (score, delta) => this.updateGameScore(score, delta),
+                    onProgress: (current, total) => this.updateGameProgress(current, total)
+                });
+                
+                console.log('GameRegistry initialized with', Object.keys(GameRegistry.games).length, 'games');
+                console.log('Available games:', GameRegistry.listGames().map(g => g.name).join(', '));
+            }
+            
+            // Legacy support: Initialize game instances for backwards compatibility
+            if (window.MatchingGame && !window.GameRegistry) {
                 this.matchingGame = new MatchingGame({
                     container: this.elements.gameItemsContainer || document.getElementById('itemsContainer'),
                     dropZones: this.elements.dropZonesContainer || document.getElementById('dropZones'),
@@ -184,7 +200,7 @@ class LexiQuestApp {
                 });
             }
             
-            if (window.MemoryGame) {
+            if (window.MemoryGame && !window.GameRegistry) {
                 this.memoryGame = new MemoryGame({
                     container: this.elements.gameItemsContainer || document.getElementById('itemsContainer'),
                     onComplete: (result) => this.handleLevelComplete(result),
@@ -193,7 +209,7 @@ class LexiQuestApp {
                 });
             }
 
-            if (window.SentenceGame) {
+            if (window.SentenceGame && !window.GameRegistry) {
                 this.sentenceGame = new SentenceGame({
                     container: this.elements.gameItemsContainer || document.getElementById('itemsContainer'),
                     dropZones: this.elements.dropZonesContainer || document.getElementById('dropZones'),
@@ -380,6 +396,21 @@ class LexiQuestApp {
         document.getElementById('readingSpeed')?.addEventListener('input', (e) => {
             const speed = parseFloat(e.target.value);
             if (window.SpeechManager) SpeechManager.setSpeed(speed);
+        });
+
+        // Color Palette Selection
+        document.querySelectorAll('.palette-option')?.forEach(option => {
+            option.addEventListener('click', () => {
+                this.setColorPalette(option.dataset.palette);
+                
+                // Update selected state
+                document.querySelectorAll('.palette-option').forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                
+                // Play feedback
+                AudioManager.play('click');
+                SpeechManager.speak(`${option.dataset.name} theme selected!`);
+            });
         });
 
         // Hub bottom tabs: implement a simple Hero editor
@@ -755,12 +786,14 @@ class LexiQuestApp {
         levelGrid.innerHTML = '';
         
         const playerProgress = Storage.progress.load();
-        const worldProgress = playerProgress[world.id] || {};
+        const worldProgress = playerProgress.worlds?.[world.id] || {};
+        const levelData = worldProgress.levels || {};
         
         // Add levels
         world.levels.forEach((level, index) => {
-            const levelProgress = worldProgress[level.number] || {};
-            const isUnlocked = index === 0 || worldProgress[world.levels[index - 1]?.number]?.completed;
+            const levelProgress = levelData[level.number] || {};
+            // First level is always unlocked, others require previous level completed
+            const isUnlocked = index === 0 || levelData[world.levels[index - 1]?.number]?.completed;
             
             const levelCard = document.createElement('div');
             levelCard.className = 'level-card';
@@ -816,10 +849,16 @@ class LexiQuestApp {
         this.currentWorld = world;
         this.currentLevel = level;
         
-        // Update game title
-        const gameTitle = document.getElementById('gameTitle');
-        if (gameTitle) {
-            gameTitle.textContent = `${world.name} - ${level.name}`;
+        // Update game title/level name in header
+        const gameLevelName = document.getElementById('gameLevelName');
+        if (gameLevelName) {
+            gameLevelName.textContent = `Level ${level.number}: ${level.name}`;
+        }
+        
+        // Update world icon
+        const worldIcon = document.querySelector('.game-world-icon');
+        if (worldIcon) {
+            worldIcon.textContent = world.icon;
         }
         
         // Reset score display
@@ -847,7 +886,15 @@ class LexiQuestApp {
 
         // Always start hand tracking for gesture-based drag and drop
         if (window.HandTracking && !HandTracking.enabled) {
-            HandTracking.start();
+            HandTracking.start().then(success => {
+                if (success) {
+                    console.log('Hand tracking started successfully');
+                } else {
+                    console.log('Hand tracking could not start (camera may not be available)');
+                }
+            }).catch(err => {
+                console.warn('Hand tracking error:', err);
+            });
         }
 
         // Speak level narration slowly and clearly when present
@@ -857,7 +904,28 @@ class LexiQuestApp {
             SpeechManager.speakClear(level.description);
         }
 
-        // Get game configuration based on world type
+        // Get containers
+        const itemsContainer = document.getElementById('itemsContainer');
+        const dropZones = document.getElementById('dropZones');
+
+        // Use GameRegistry if available (new modular approach)
+        if (window.GameRegistry) {
+            this.currentGame = GameRegistry.startGame(
+                world,
+                level,
+                { itemsContainer, dropZones },
+                {
+                    onComplete: (result) => this.handleLevelComplete(result),
+                    onScoreChange: (score, delta) => this.updateGameScore(score, delta),
+                    onProgress: (current, total) => this.updateGameProgress(current, total)
+                }
+            );
+            
+            AudioManager.play('levelStart');
+            return;
+        }
+
+        // Legacy fallback: Use hardcoded game type selection
         let gameConfig;
 
         switch (world.id) {
@@ -884,10 +952,6 @@ class LexiQuestApp {
             default:
                 gameConfig = LetterGames.getGameConfig(level);
         }
-
-        // Get containers
-        const itemsContainer = document.getElementById('itemsContainer');
-        const dropZones = document.getElementById('dropZones');
 
         // Initialize appropriate game type
         if (world.id === 'stories') {
@@ -1151,7 +1215,8 @@ class LexiQuestApp {
         const settings = {
             soundEnabled: Storage.settings.load('soundEnabled', true),
             speechEnabled: Storage.settings.load('speechEnabled', true),
-            particlesEnabled: Storage.settings.load('particlesEnabled', true)
+            particlesEnabled: Storage.settings.load('particlesEnabled', true),
+            colorPalette: Storage.settings.load('colorPalette', 'default')
         };
         
         // Update toggles
@@ -1163,7 +1228,52 @@ class LexiQuestApp {
         if (speechToggle) speechToggle.checked = settings.speechEnabled;
         if (particleToggle) particleToggle.checked = settings.particlesEnabled;
         
+        // Update palette selection
+        document.querySelectorAll('.palette-option').forEach(opt => {
+            opt.classList.toggle('selected', opt.dataset.palette === settings.colorPalette);
+        });
+        
         this.showModal(this.elements.settingsModal);
+    }
+
+    /**
+     * Set color palette theme
+     */
+    setColorPalette(paletteName) {
+        const body = document.body;
+        
+        // Remove all existing palette classes
+        const paletteClasses = [
+            'palette-ocean', 'palette-forest', 'palette-sunset',
+            'palette-berry', 'palette-candy', 'palette-earth',
+            'palette-cream', 'palette-rainbow'
+        ];
+        paletteClasses.forEach(cls => body.classList.remove(cls));
+        
+        // Add new palette class (unless it's default)
+        if (paletteName && paletteName !== 'default') {
+            body.classList.add(`palette-${paletteName}`);
+        }
+        
+        // Save preference
+        Storage.settings.save('colorPalette', paletteName || 'default');
+        
+        console.log(`🎨 Color palette changed to: ${paletteName}`);
+    }
+
+    /**
+     * Load saved color palette on startup
+     */
+    loadColorPalette() {
+        const savedPalette = Storage.settings.load('colorPalette', 'default');
+        if (savedPalette && savedPalette !== 'default') {
+            this.setColorPalette(savedPalette);
+        }
+        
+        // Update palette selector UI
+        document.querySelectorAll('.palette-option').forEach(opt => {
+            opt.classList.toggle('selected', opt.dataset.palette === savedPalette);
+        });
     }
 
     /**
