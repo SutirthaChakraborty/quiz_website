@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="LexiQuest - An interactive learning adventure for children with dyslexia">
+    
+    <title>LexiQuest - Learning Adventure</title>
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.cdnfonts.com/css/opendyslexic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/screens.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Debug Script - Remove after testing -->
+    <script>
+        console.log('=== LexiQuest Debug ===');
+        console.log('1. Inline script running');
+        window.onerror = function(msg, url, line, col, error) {
+            console.error('JS Error:', msg, 'at', url, ':', line);
+            // Show error on page
+            document.body.insertAdjacentHTML('afterbegin', 
+                '<div style="position:fixed;top:0;left:0;right:0;background:red;color:white;padding:10px;z-index:99999;font-size:14px;">' +
+                'Error: ' + msg + ' (Line: ' + line + ')</div>');
+            return false;
+        };
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('2. DOMContentLoaded fired');
+            setTimeout(function() {
+                var loading = document.getElementById('loadingScreen');
+                var welcome = document.getElementById('welcomeScreen');
+                console.log('3. After 6s - Loading visible:', loading && loading.classList.contains('active'), 
+                            'Welcome visible:', welcome && welcome.classList.contains('active'));
+                if (loading && loading.classList.contains('active')) {
+                    console.log('4. Still on loading after 6s, forcing welcome...');
+                    loading.classList.remove('active');
+                    welcome.classList.add('active');
+                }
+            }, 6000);
+        });
+    </script>
+    
+    <!-- Particle Canvas Background -->
+    <canvas id="particleCanvas"></canvas>
+    
+    <!-- Aurora Background Effect -->
+    <div class="aurora-bg">
+        <div class="aurora aurora-1"></div>
+        <div class="aurora aurora-2"></div>
+        <div class="aurora aurora-3"></div>
+    </div>
+    
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="screen loading-screen active">
+        <div class="loading-content">
+            <div class="logo-container">
+                <div class="logo-icon">🧙‍♂️</div>
+                <h1 class="logo-text">LexiQuest</h1>
+                <p class="logo-tagline">Your Learning Adventure Begins!</p>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar">
+                    <div class="loading-progress" id="loadingProgress"></div>
+                </div>
+                <p class="loading-text" id="loadingText">Loading magical worlds...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Welcome Screen - Character Creation/Selection -->
+    <div id="welcomeScreen" class="screen welcome-screen">
+        <div class="welcome-container">
+            <div class="welcome-header">
+                <h1>Welcome, Hero! 🌟</h1>
+                <p>Create your character to begin the adventure</p>
+            </div>
+            
+            <div class="character-creator">
+                <div class="character-preview" id="characterPreview">
+                    <div class="character-avatar" id="characterAvatar">
+                        <div class="avatar-base">🧒</div>
+                        <div class="avatar-accessory" id="avatarAccessory"></div>
+                        <div class="avatar-pet" id="avatarPet"></div>
+                    </div>
+                    <div class="character-name-display" id="characterNameDisplay">Hero</div>
+                    <div class="character-level">Level 1 Adventurer</div>
+                </div>
+                
+                <div class="creator-options">
+                    <div class="option-group">
+                        <label>Your Name</label>
+                        <input type="text" id="characterName" class="name-input" placeholder="Enter your name" maxlength="12">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>Choose Your Hero</label>
+                        <div class="avatar-options" id="avatarOptions">
+                            <button class="avatar-btn selected" data-avatar="🧒">🧒</button>
+                            <button class="avatar-btn" data-avatar="👧">👧</button>
+                            <button class="avatar-btn" data-avatar="👦">👦</button>
+                            <button class="avatar-btn" data-avatar="🧒🏽">🧒🏽</button>
+                            <button class="avatar-btn" data-avatar="👧🏿">👧🏿</button>
+                            <button class="avatar-btn" data-avatar="👦🏻">👦🏻</button>
+                            <button class="avatar-btn" data-avatar="🦸">🦸</button>
+                            <button class="avatar-btn" data-avatar="🧚">🧚</button>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>Choose Your Companion</label>
+                        <div class="pet-options" id="petOptions">
+                            <button class="pet-btn selected" data-pet="🐱">🐱</button>
+                            <button class="pet-btn" data-pet="🐶">🐶</button>
+                            <button class="pet-btn" data-pet="🐰">🐰</button>
+                            <button class="pet-btn" data-pet="🦊">🦊</button>
+                            <button class="pet-btn" data-pet="🐲">🐲</button>
+                            <button class="pet-btn" data-pet="🦄">🦄</button>
+                            <button class="pet-btn" data-pet="🐼">🐼</button>
+                            <button class="pet-btn" data-pet="🦉">🦉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary btn-large start-adventure-btn" id="startAdventureBtn">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text">Start Adventure!</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main Hub Screen - World Selection -->
+    <div id="hubScreen" class="screen hub-screen">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="player-info">
+                <div class="player-avatar" id="hubPlayerAvatar">🧒</div>
+                <div class="player-details">
+                    <span class="player-name" id="hubPlayerName">Hero</span>
+                    <div class="xp-bar">
+                        <div class="xp-progress" id="xpProgress" style="width: 0%"></div>
+                    </div>
+                    <span class="player-level">Lvl <span id="hubPlayerLevel">1</span></span>
+                </div>
+            </div>
+            <div class="currency-display">
+                <div class="currency coins">
+                    <span class="currency-icon">🪙</span>
+                    <span class="currency-value" id="coinCount">0</span>
+                </div>
+                <div class="currency gems">
+                    <span class="currency-icon">💎</span>
+                    <span class="currency-value" id="gemCount">0</span>
+                </div>
+            </div>
+            <div class="top-bar-actions">
+                <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
+                <button class="icon-btn" id="achievementsBtn" title="Achievements">🏆</button>
+            </div>
+        </div>
+        
+        <!-- Story Banner -->
+        <div class="story-banner" id="storyBanner">
+            <div class="story-character">🧙‍♂️</div>
+            <div class="story-content">
+                <div class="story-text" id="storyText">
+                    "Welcome, young hero! The Kingdom of Letters needs your help. Choose a world to begin your quest!"
+                </div>
+            </div>
+            <button class="story-close" id="storyClose">✕</button>
+        </div>
+        
+        <!-- World Map -->
+        <div class="world-map-container">
+            <div class="world-map" id="worldMap">
+                <!-- World 1: Letter Kingdom -->
+                <div class="world-node" data-world="letters" data-unlocked="true">
+                    <div class="world-icon">🏰</div>
+                    <div class="world-info">
+                        <h3>Letter Kingdom</h3>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>0/10</span>
+                        </div>
+                    </div>
+                    <div class="world-status unlocked">✨</div>
+                </div>
+                
+                <!-- World 2: Color Valley -->
+                <div class="world-node" data-world="colors" data-unlocked="true">
+                    <div class="world-icon">🌈</div>
+                    <div class="world-info">
+                        <h3>Color Valley</h3>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>0/10</span>
+                        </div>
+                    </div>
+                    <div class="world-status unlocked">✨</div>
+                </div>
+                
+                <!-- World 3: Word Forest -->
+                <div class="world-node" data-world="words" data-unlocked="true">
+                    <div class="world-icon">🌲</div>
+                    <div class="world-info">
+                        <h3>Word Forest</h3>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>0/10</span>
+                        </div>
+                    </div>
+                    <div class="world-status unlocked">✨</div>
+                </div>
+                
+                <!-- World 4: Number Mountain -->
+                <div class="world-node" data-world="numbers" data-unlocked="true">
+                    <div class="world-icon">🏔️</div>
+                    <div class="world-info">
+                        <h3>Number Mountain</h3>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>0/10</span>
+                        </div>
+                    </div>
+                    <div class="world-status unlocked">✨</div>
+                </div>
+                
+                <!-- World 5: Story Ocean -->
+                <div class="world-node" data-world="stories" data-unlocked="true">
+                    <div class="world-icon">🌊</div>
+                    <div class="world-info">
+                        <h3>Story Ocean</h3>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>0/10</span>
+                        </div>
+                    </div>
+                    <div class="world-status unlocked">✨</div>
+                </div>
+                
+                <!-- Path connections will be drawn via CSS/Canvas -->
+                <svg class="world-paths" id="worldPaths"></svg>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="nav-btn active" data-tab="adventure">
+                <span class="nav-icon">🗺️</span>
+                <span class="nav-label">Adventure</span>
+            </button>
+            <button class="nav-btn" data-tab="character">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Hero</span>
+            </button>
+            <button class="nav-btn" data-tab="shop">
+                <span class="nav-icon">🏪</span>
+                <span class="nav-label">Shop</span>
+            </button>
+            <button class="nav-btn" data-tab="daily">
+                <span class="nav-icon">🎁</span>
+                <span class="nav-label">Daily</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Level Selection Screen -->
+    <div id="levelScreen" class="screen level-screen">
+        <div class="level-header">
+            <button class="back-btn" id="levelBackBtn">
+                <span>←</span>
+            </button>
+            <div class="world-title" id="worldTitle">
+                <span class="world-icon-small">🏰</span>
+                <h2>Letter Kingdom</h2>
+            </div>
+            <div class="world-stars">
+                <span>⭐</span>
+                <span id="worldStars">0</span>/<span id="worldTotalStars">30</span>
+            </div>
+        </div>
+        
+        <div class="level-story-intro" id="levelStoryIntro">
+            <div class="story-narrator">🧙‍♂️</div>
+            <div class="story-bubble">
+                <p id="worldStoryText">The evil Confusion Wizard has scattered all the letters! Help the villagers find them!</p>
+            </div>
+        </div>
+        
+        <div class="levels-grid" id="levelsGrid">
+            <!-- Levels will be dynamically generated -->
+        </div>
+    </div>
+    
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen game-screen">
+        <!-- Game Header -->
+        <div class="game-header">
+            <button class="back-btn" id="gameBackBtn">←</button>
+            <div class="game-info">
+                <span class="game-world-icon">🏰</span>
+                <span class="game-level-name" id="gameLevelName">Level 1</span>
+            </div>
+            <div class="game-stats">
+                <div class="stat timer">
+                    <span class="stat-icon">⏱️</span>
+                    <span class="stat-value" id="gameTimer">0:00</span>
+                </div>
+                <div class="stat score">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value" id="gameScore">0</span>
+                </div>
+            </div>
+            <button class="icon-btn pause-btn" id="pauseBtn">⏸️</button>
+        </div>
+        
+        <!-- Game Progress -->
+        <div class="game-progress-bar">
+            <div class="progress-fill" id="gameProgress" style="width: 0%"></div>
+            <div class="progress-checkpoints" id="progressCheckpoints"></div>
+        </div>
+        
+        <!-- Game Container - Games load here -->
+        <div class="game-container" id="gameContainer">
+            <!-- Drop Zones Container -->
+            <div class="drop-zones-container" id="dropZones">
+                <!-- Drop zones will be added dynamically -->
+            </div>
+            
+            <!-- Game Items Container -->
+            <div class="game-items-container" id="itemsContainer">
+                <!-- Draggable items will be added dynamically -->
+            </div>
+        </div>
+        
+        <!-- Hint & Power-ups Bar -->
+        <div class="powerups-bar">
+            <button class="powerup-btn hint-btn" id="hintBtn">
+                <span class="powerup-icon">💡</span>
+                <span class="powerup-count" id="hintCount">3</span>
+            </button>
+            <button class="powerup-btn freeze-btn" id="freezeBtn">
+                <span class="powerup-icon">❄️</span>
+                <span class="powerup-count" id="freezeCount">1</span>
+            </button>
+            <button class="powerup-btn skip-btn" id="skipBtn">
+                <span class="powerup-icon">⏭️</span>
+                <span class="powerup-count" id="skipCount">1</span>
+            </button>
+        </div>
+        
+        <!-- Floating Camera for Hand Tracking -->
+        <div class="floating-camera" id="floatingCamera">
+            <div class="camera-status" id="cameraStatus"></div>
+            <video id="cameraVideo" autoplay playsinline muted></video>
+            <canvas id="cameraCanvas"></canvas>
+            <button class="camera-toggle" id="cameraToggle">📷</button>
+        </div>
+        
+        <!-- Hand Cursor -->
+        <div class="hand-cursor" id="handCursor">
+            <div class="cursor-ring"></div>
+            <div class="cursor-dot"></div>
+        </div>
+    </div>
+    
+    <!-- Result Screen -->
+    <div id="resultScreen" class="screen result-screen">
+        <div class="result-container">
+            <div class="result-stars" id="resultStars">
+                <span class="star" data-index="1">⭐</span>
+                <span class="star" data-index="2">⭐</span>
+                <span class="star" data-index="3">⭐</span>
+            </div>
+            <h2 class="result-title" id="resultTitle">Amazing!</h2>
+            <p class="result-subtitle" id="resultSubtitle">You completed the level!</p>
+            
+            <div class="result-stats">
+                <div class="result-stat">
+                    <span class="stat-label">Score</span>
+                    <span class="stat-value" id="resultScore">0</span>
+                </div>
+                <div class="result-stat">
+                    <span class="stat-label">Time</span>
+                    <span class="stat-value" id="resultTime">0:00</span>
+                </div>
+                <div class="result-stat">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="resultAccuracy">100%</span>
+                </div>
+            </div>
+            
+            <div class="result-rewards">
+                <div class="reward-item coins">
+                    <span class="reward-icon">🪙</span>
+                    <span class="reward-value">+<span id="rewardCoins">50</span></span>
+                </div>
+                <div class="reward-item xp">
+                    <span class="reward-icon">✨</span>
+                    <span class="reward-value">+<span id="rewardXP">25</span> XP</span>
+                </div>
+            </div>
+            
+            <div class="result-actions">
+                <button class="btn btn-secondary" id="replayBtn">
+                    <span class="btn-icon">🔄</span>
+                    <span>Replay</span>
+                </button>
+                <button class="btn btn-primary" id="nextLevelBtn">
+                    <span>Next Level</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Confetti Container -->
+        <div class="confetti-container" id="confettiContainer"></div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content settings-content">
+            <div class="modal-header">
+                <h2>⚙️ Settings</h2>
+                <button class="modal-close" id="settingsClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Sound Effects</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>Music</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="musicToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>Voice Reading</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="voiceToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>Hand Tracking</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="handTrackingToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>Dyslexia Font</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="dyslexiaFontToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>Reading Speed</label>
+                    <input type="range" id="readingSpeed" min="0.5" max="1.5" step="0.1" value="0.8">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pause Modal -->
+    <div id="pauseModal" class="modal">
+        <div class="modal-content pause-content">
+            <h2>⏸️ Game Paused</h2>
+            <div class="pause-actions">
+                <button class="btn btn-primary" id="resumeBtn">
+                    <span class="btn-icon">▶️</span>
+                    <span>Resume</span>
+                </button>
+                <button class="btn btn-secondary" id="restartBtn">
+                    <span class="btn-icon">🔄</span>
+                    <span>Restart</span>
+                </button>
+                <button class="btn btn-outline" id="quitBtn">
+                    <span class="btn-icon">🚪</span>
+                    <span>Quit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Achievement Popup -->
+    <div id="achievementPopup" class="achievement-popup">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-info">
+            <span class="achievement-title">Achievement Unlocked!</span>
+            <span class="achievement-name" id="achievementName">First Steps</span>
+        </div>
+    </div>
+    
+    <!-- Level Up Popup -->
+    <div id="levelUpPopup" class="levelup-popup">
+        <div class="levelup-content">
+            <div class="levelup-icon">⬆️</div>
+            <h2>Level Up!</h2>
+            <p class="new-level">Level <span id="newLevel">2</span></p>
+            <div class="levelup-rewards">
+                <span>+100 🪙</span>
+                <span>+1 💡</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Feedback Toast -->
+    <div id="feedbackToast" class="feedback-toast">
+        <span class="toast-icon">✓</span>
+        <span class="toast-message">Great job!</span>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    
+    <!-- TensorFlow.js for advanced ML features -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    
+    <!-- Howler.js for audio -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+    
+    <!-- Anime.js for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    
+    <!-- App Scripts - Utilities -->
+    <script src="js/utils/helpers.js?v=9"></script>
+    <script src="js/utils/storage.js?v=9"></script>
+    <script src="js/utils/audio.js?v=9"></script>
+    <script src="js/utils/speech.js?v=9"></script>
+    
+    <!-- App Scripts - Core -->
+    <script src="js/core/particles.js?v=9"></script>
+    <script src="js/core/handTracking.js?v=9"></script>
+    <script src="js/core/gameEngine.js?v=9"></script>
+    <script src="js/core/progression.js?v=9"></script>
+    
+    <!-- App Scripts - Data -->
+    <script src="js/data/gameData.js?v=9"></script>
+    <script src="js/data/worldData.js?v=9"></script>
+    
+    <!-- App Scripts - Games -->
+    <script src="js/games/MatchingGame.js?v=9"></script>
+    <script src="js/games/MemoryGame.js?v=9"></script>
+    <script src="js/games/gameGenerators.js?v=9"></script>
+    <script src="js/games/SentenceGame.js?v=9"></script>
+    
+    <!-- Main App -->
+    <script src="js/App.js?v=9"></script>
+</body>
+</html>

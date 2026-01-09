@@ -1,0 +1,341 @@
+/* ============================================
+   LexiQuest - Base Styles
+   ============================================ */
+
+/* Reset & Box Sizing */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Prevent overscroll on mobile */
+html {
+    height: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    letter-spacing: var(--tracking-normal);
+    word-spacing: var(--word-spacing);
+    color: var(--text-primary);
+    background: var(--bg-dark);
+    height: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Dyslexia Font Mode */
+body.dyslexia-font {
+    font-family: var(--font-dyslexia);
+    letter-spacing: var(--tracking-wide);
+    word-spacing: 0.1em;
+    line-height: var(--leading-relaxed);
+}
+
+/* Smooth Scrolling */
+.scrollable {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* Hide scrollbars but keep functionality */
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Links */
+a {
+    color: var(--color-primary-light);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-primary);
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Buttons Reset */
+button {
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible {
+    outline: 3px solid var(--color-primary-light);
+    outline-offset: 2px;
+}
+
+/* Input Reset */
+input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    border: none;
+    outline: none;
+    background: none;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: 3px solid var(--color-primary-light);
+    outline-offset: 2px;
+}
+
+/* Lists */
+ul, ol {
+    list-style: none;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-sm);
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+h5 { font-size: var(--text-base); }
+h6 { font-size: var(--text-sm); }
+
+p {
+    margin-bottom: var(--space-md);
+}
+
+strong, b {
+    font-weight: 700;
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+
+.hidden { display: none !important; }
+.visible { visibility: visible; }
+.invisible { visibility: hidden; }
+
+.opacity-0 { opacity: 0; }
+.opacity-50 { opacity: 0.5; }
+.opacity-100 { opacity: 1; }
+
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+
+/* Screen Container */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    display: none;
+    flex-direction: column;
+    z-index: var(--z-base);
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+    pointer-events: none; /* Prevent clicks on hidden/fading screens */
+}
+
+.screen.active {
+    display: flex;
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto; /* Enable clicks when active */
+}
+
+.screen.transitioning-out {
+    opacity: 0;
+    transform: scale(1.05);
+}
+
+.screen.transitioning-in {
+    display: flex;
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+/* Canvas Backgrounds */
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Aurora Background */
+.aurora-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.aurora {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    border-radius: 40%;
+    opacity: 0.15;
+    filter: blur(80px);
+    animation: auroraMove 20s ease-in-out infinite;
+}
+
+.aurora-1 {
+    background: var(--color-primary);
+    top: -50%;
+    left: -50%;
+    animation-delay: 0s;
+}
+
+.aurora-2 {
+    background: var(--color-accent-pink);
+    top: -30%;
+    right: -50%;
+    animation-delay: -7s;
+}
+
+.aurora-3 {
+    background: var(--color-secondary);
+    bottom: -50%;
+    left: -30%;
+    animation-delay: -14s;
+}
+
+@keyframes auroraMove {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(5%, 5%) rotate(5deg);
+    }
+    50% {
+        transform: translate(-5%, 10%) rotate(-5deg);
+    }
+    75% {
+        transform: translate(-10%, 5%) rotate(3deg);
+    }
+}
+
+/* Focus Styles for Accessibility */
+:focus-visible {
+    outline: 3px solid var(--color-primary-light);
+    outline-offset: 2px;
+}
+
+/* Touch Action */
+.touchable {
+    touch-action: manipulation;
+}
+
+/* Draggable Items */
+.draggable {
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.draggable:active {
+    cursor: grabbing;
+}
+
+.draggable.dragging {
+    cursor: grabbing;
+    z-index: var(--z-popover);
+}
+
+/* Selection Disabled */
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Safe Area Padding for notched devices */
+.safe-area-top {
+    padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-area-left {
+    padding-left: env(safe-area-inset-left, 0);
+}
+
+.safe-area-right {
+    padding-right: env(safe-area-inset-right, 0);
+}
+
+/* Glass Effect */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}

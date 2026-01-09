@@ -1,0 +1,451 @@
+/* ============================================
+   LexiQuest - Responsive Design
+   ============================================ */
+
+/* === Mobile First - Base Styles === */
+
+/* Small devices (phones, 375px and up) */
+@media (min-width: 375px) {
+    :root {
+        --item-size: clamp(55px, 13vw, 85px);
+        --drop-zone-size: clamp(65px, 16vw, 100px);
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    :root {
+        --item-size: 80px;
+        --drop-zone-size: 100px;
+        --floating-camera-size: 100px;
+    }
+
+    .welcome-container {
+        max-width: 600px;
+    }
+
+    .character-creator {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: var(--space-xl);
+        text-align: left;
+    }
+
+    .character-preview {
+        margin-bottom: 0;
+    }
+
+    .world-map {
+        max-width: 600px;
+    }
+
+    .levels-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: var(--space-lg);
+    }
+
+    .result-stats {
+        gap: var(--space-2xl);
+    }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+    :root {
+        --item-size: 90px;
+        --drop-zone-size: 110px;
+    }
+
+    .hub-screen {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        grid-template-rows: auto 1fr auto;
+    }
+
+    .top-bar {
+        grid-column: 1 / -1;
+    }
+
+    .story-banner {
+        grid-column: 1;
+        margin: 0;
+        border-radius: 0;
+        align-self: start;
+    }
+
+    .world-map-container {
+        grid-column: 2;
+    }
+
+    .bottom-nav {
+        grid-column: 1 / -1;
+    }
+
+    .levels-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .game-container {
+        max-width: 900px;
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+/* Extra large devices (large desktops, 1440px and up) */
+@media (min-width: 1440px) {
+    :root {
+        --item-size: 100px;
+        --drop-zone-size: 120px;
+    }
+
+    .levels-grid {
+        grid-template-columns: repeat(8, 1fr);
+    }
+}
+
+/* === Landscape Mode Adjustments === */
+
+@media (orientation: landscape) and (max-height: 500px) {
+    :root {
+        --header-height: 50px;
+        --bottom-nav-height: 60px;
+        --item-size: clamp(40px, 10vh, 60px);
+        --drop-zone-size: clamp(50px, 12vh, 70px);
+    }
+
+    .loading-content {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xl);
+    }
+
+    .logo-container {
+        margin-bottom: 0;
+    }
+
+    .logo-icon {
+        font-size: 3rem;
+    }
+
+    .logo-text {
+        font-size: var(--text-2xl);
+    }
+
+    .welcome-screen {
+        padding: var(--space-sm);
+    }
+
+    .character-creator {
+        display: flex;
+        flex-direction: row;
+        padding: var(--space-md);
+    }
+
+    .character-preview {
+        flex-shrink: 0;
+    }
+
+    .character-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .avatar-base {
+        font-size: 2.5rem;
+    }
+
+    .story-banner {
+        padding: var(--space-sm);
+        margin: var(--space-sm);
+    }
+
+    .story-character {
+        font-size: 2rem;
+    }
+
+    .story-text {
+        font-size: var(--text-xs);
+    }
+
+    .world-node {
+        padding: var(--space-sm);
+    }
+
+    .world-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.5rem;
+    }
+
+    .game-header {
+        padding: var(--space-xs) var(--space-md);
+    }
+
+    .game-container {
+        padding: var(--space-sm);
+    }
+
+    .powerups-bar {
+        bottom: var(--space-sm);
+    }
+
+    .powerup-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .floating-camera {
+        width: 60px;
+        height: 60px;
+        bottom: 70px;
+    }
+
+    .level-story-intro {
+        padding: var(--space-sm);
+        margin: var(--space-sm);
+    }
+
+    .levels-grid {
+        padding: var(--space-sm);
+        gap: var(--space-sm);
+    }
+
+    .level-node {
+        padding: var(--space-sm);
+    }
+
+    .result-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-lg);
+    }
+
+    .result-stars {
+        width: 100%;
+    }
+
+    .result-stats,
+    .result-rewards {
+        width: auto;
+    }
+}
+
+/* === Very Small Screens === */
+
+@media (max-width: 350px) {
+    :root {
+        --item-size: 45px;
+        --drop-zone-size: 55px;
+    }
+
+    .avatar-options, .pet-options {
+        gap: var(--space-xs);
+    }
+
+    .avatar-btn, .pet-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.4rem;
+    }
+
+    .btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--text-sm);
+    }
+
+    .currency {
+        padding: var(--space-xs);
+    }
+
+    .top-bar {
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+/* === Very Small Height (keyboard, small phones) === */
+
+@media (max-height: 400px) {
+    .story-banner {
+        display: none;
+    }
+
+    .level-story-intro {
+        display: none;
+    }
+
+    .game-progress-bar {
+        height: 4px;
+    }
+}
+
+/* === Touch Device Optimizations === */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    .btn {
+        min-height: 52px;
+    }
+
+    .icon-btn {
+        width: 48px;
+        height: 48px;
+    }
+
+    .avatar-btn, .pet-btn {
+        width: 55px;
+        height: 55px;
+    }
+
+    .level-node {
+        min-width: 70px;
+        min-height: 70px;
+    }
+
+    /* Remove hover effects on touch */
+    .card-interactive:hover {
+        transform: none;
+    }
+
+    .world-node:hover {
+        transform: none;
+    }
+
+    .level-node:hover {
+        transform: none;
+    }
+}
+
+/* === High Resolution Displays === */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Sharper shadows */
+    :root {
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* === Dark Mode Preference === */
+
+@media (prefers-color-scheme: dark) {
+    /* Already dark by default, but can add specific dark mode overrides */
+}
+
+/* === Light Mode Preference === */
+
+@media (prefers-color-scheme: light) {
+    /* Can add light mode styles here if needed */
+}
+
+/* === Reduced Motion === */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .aurora-bg {
+        display: none;
+    }
+
+    #particleCanvas {
+        display: none;
+    }
+}
+
+/* === High Contrast Mode === */
+
+@media (prefers-contrast: high) {
+    :root {
+        --bg-card-light: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn {
+        border: 2px solid currentColor;
+    }
+
+    .game-item {
+        border: 2px solid white;
+    }
+
+    .drop-zone {
+        border-width: 4px;
+    }
+}
+
+/* === Print Styles === */
+
+@media print {
+    .screen {
+        display: none !important;
+    }
+
+    .screen.active {
+        display: block !important;
+        position: static;
+        height: auto;
+    }
+
+    .aurora-bg,
+    #particleCanvas,
+    .floating-camera,
+    .hand-cursor,
+    .bottom-nav,
+    .powerups-bar {
+        display: none !important;
+    }
+}
+
+/* === Safe Area Insets for Notched Devices === */
+
+@supports (padding: max(0px)) {
+    .top-bar {
+        padding-top: max(var(--space-sm), env(safe-area-inset-top));
+    }
+
+    .bottom-nav {
+        padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
+        height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+    }
+
+    .hub-screen {
+        padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+    }
+
+    .floating-camera {
+        right: max(var(--space-md), env(safe-area-inset-right));
+    }
+}
+
+/* === Fullscreen Mode === */
+
+:fullscreen {
+    background: var(--bg-dark);
+}
+
+:fullscreen .game-screen {
+    height: 100vh;
+}
+
+/* === PWA Standalone Mode === */
+
+@media (display-mode: standalone) {
+    .top-bar {
+        padding-top: env(safe-area-inset-top, 20px);
+    }
+}
+
+/* === Focus Visible for Keyboard Navigation === */
+
+@media (scripting: enabled) {
+    :focus:not(:focus-visible) {
+        outline: none;
+    }
+}

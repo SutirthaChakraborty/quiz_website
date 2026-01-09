@@ -1,0 +1,169 @@
+/* ============================================
+   LexiQuest Design System - CSS Variables
+   ============================================ */
+
+:root {
+    /* === Color Palette === */
+    
+    /* Primary Colors - Deep Space Theme */
+    --color-primary: #6c5ce7;
+    --color-primary-light: #a29bfe;
+    --color-primary-dark: #4834d4;
+    
+    /* Secondary Colors */
+    --color-secondary: #00cec9;
+    --color-secondary-light: #81ecec;
+    --color-secondary-dark: #00b894;
+    
+    /* Accent Colors - Vibrant & Fun */
+    --color-accent-pink: #fd79a8;
+    --color-accent-orange: #fdcb6e;
+    --color-accent-yellow: #ffeaa7;
+    --color-accent-green: #55efc4;
+    --color-accent-blue: #74b9ff;
+    --color-accent-purple: #a29bfe;
+    --color-accent-red: #ff7675;
+    
+    /* Background Colors */
+    --bg-dark: #1a1a2e;
+    --bg-darker: #16213e;
+    --bg-card: #0f3460;
+    --bg-card-light: rgba(255, 255, 255, 0.1);
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+    
+    /* Dyslexia-Friendly Light Mode */
+    --bg-light: #fdf6e3;
+    --bg-light-card: #fff8e7;
+    --bg-cream: #fffbf0;
+    
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --text-dark: #2d3436;
+    --text-dark-secondary: #636e72;
+    
+    /* Status Colors */
+    --color-success: #00b894;
+    --color-error: #ff7675;
+    --color-warning: #fdcb6e;
+    --color-info: #74b9ff;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent-pink) 100%);
+    --gradient-secondary: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent-blue) 100%);
+    --gradient-success: linear-gradient(135deg, var(--color-success) 0%, var(--color-accent-green) 100%);
+    --gradient-gold: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+    --gradient-rainbow: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff);
+    --gradient-aurora: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f64f59 100%);
+    --gradient-night: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    
+    /* === Typography === */
+    --font-dyslexia: 'OpenDyslexic', 'Comic Sans MS', cursive, sans-serif;
+    --font-display: 'Fredoka One', cursive;
+    --font-body: 'Nunito', sans-serif;
+    
+    /* Font Sizes - Fluid Typography */
+    --text-xs: clamp(0.65rem, 1.5vw, 0.75rem);
+    --text-sm: clamp(0.75rem, 2vw, 0.875rem);
+    --text-base: clamp(0.875rem, 2.5vw, 1rem);
+    --text-lg: clamp(1rem, 3vw, 1.25rem);
+    --text-xl: clamp(1.25rem, 4vw, 1.5rem);
+    --text-2xl: clamp(1.5rem, 5vw, 2rem);
+    --text-3xl: clamp(2rem, 6vw, 3rem);
+    --text-4xl: clamp(2.5rem, 8vw, 4rem);
+    
+    /* Line Heights */
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.8;
+    
+    /* Letter Spacing - Important for dyslexia */
+    --tracking-normal: 0.03em;
+    --tracking-wide: 0.05em;
+    --tracking-wider: 0.1em;
+    
+    /* Word Spacing */
+    --word-spacing: 0.05em;
+    
+    /* === Spacing === */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    
+    /* === Border Radius === */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 30px;
+    --radius-full: 9999px;
+    
+    /* === Shadows === */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.3);
+    --shadow-glow: 0 0 30px rgba(108, 92, 231, 0.4);
+    --shadow-glow-success: 0 0 30px rgba(0, 184, 148, 0.4);
+    --shadow-glow-error: 0 0 30px rgba(255, 118, 117, 0.4);
+    
+    /* === Transitions === */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* === Z-Index Layers === */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 400;
+    --z-modal: 500;
+    --z-popover: 600;
+    --z-tooltip: 700;
+    --z-toast: 800;
+    --z-cursor: 900;
+    --z-loading: 1000;
+    
+    /* === Component Sizes === */
+    --header-height: 60px;
+    --bottom-nav-height: 70px;
+    --floating-camera-size: 80px;
+    --button-height: 48px;
+    --input-height: 48px;
+    
+    /* === Game Specific === */
+    --card-size: clamp(60px, 15vw, 100px);
+    --drop-zone-size: clamp(70px, 18vw, 120px);
+    --item-size: clamp(50px, 12vw, 80px);
+}
+
+/* Dyslexia Mode Overrides */
+.dyslexia-mode {
+    --font-body: var(--font-dyslexia);
+    --leading-normal: 1.8;
+    --tracking-normal: 0.05em;
+    --word-spacing: 0.1em;
+}
+
+/* Light Mode */
+.light-mode {
+    --bg-dark: var(--bg-light);
+    --bg-darker: var(--bg-cream);
+    --bg-card: var(--bg-light-card);
+    --text-primary: var(--text-dark);
+    --text-secondary: var(--text-dark-secondary);
+}
+
+/* High Contrast Mode */
+.high-contrast {
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --bg-dark: #000000;
+    --bg-card: #1a1a1a;
+}
